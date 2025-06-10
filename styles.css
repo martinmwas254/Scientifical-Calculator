@@ -1,0 +1,70 @@
+*, *::before, *::after {
+    box-sizing: border-box; /* Ensures padding and border are included in the element's total width and height */
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* Modern, readable font */
+    font-weight: normal;
+}
+
+body {
+    margin: 0;
+    background: linear-gradient(to right, #4CAF50, #2196F3); /* A pleasant gradient background */
+    display: flex;
+    justify-content: center; /* Center calculator horizontally */
+    align-items: center; /* Center calculator vertically */
+    min-height: 100vh; /* Take full viewport height */
+}
+
+.calculator-grid {
+    display: grid;
+    justify-content: center;
+    /* Defines 5 columns, each 75px wide, accommodating scientific and basic operations */
+    grid-template-columns: repeat(5, 75px);
+    /* Defines rows: 120px for display, then 6 rows of 75px for buttons */
+    grid-template-rows: minmax(120px, auto) repeat(6, 75px);
+    background-color: #333; /* Dark background for the calculator body */
+    padding: 15px;
+    border-radius: 10px;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5); /* Soft shadow for depth */
+}
+
+.calculator-grid > button {
+    cursor: pointer;
+    font-size: 1.5rem;
+    border: 1px solid #555; /* Subtle border for buttons */
+    outline: none;
+    background-color: rgba(255, 255, 255, .75); /* Semi-transparent white buttons */
+    transition: background-color 0.2s ease-in-out; /* Smooth hover effect */
+    border-radius: 5px; /* Slightly rounded corners for buttons */
+    margin: 5px; /* Spacing between buttons */
+}
+
+.calculator-grid > button:hover {
+    background-color: rgba(255, 255, 255, .9); /* Lighter background on hover */
+}
+
+.span-2 {
+    grid-column: span 2; /* Makes an element span two columns */
+}
+
+.output {
+    grid-column: 1 / -1; /* Spans across all columns */
+    background-color: rgba(0, 0, 0, .75); /* Dark, semi-transparent display background */
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end; /* Align text to the right */
+    justify-content: space-around; /* Distribute space vertically */
+    padding: 10px;
+    word-wrap: break-word; /* Allow long words to break */
+    word-break: break-all; /* Force breaks for very long strings */
+    border-radius: 8px; /* Rounded corners for the display */
+    margin-bottom: 10px; /* Space below the display */
+}
+
+.output .previous-operand {
+    color: rgba(255, 255, 255, .75); /* Faded color for previous operation */
+    font-size: 1.2rem;
+}
+
+.output .current-operand {
+    color: white; /* Bright white for current input/result */
+    font-size: 2.5rem; /* Large font for current display */
+}

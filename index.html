@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scientific Calculator</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="calculator-grid">
+        <div class="output">
+            <div data-previous-operand class="previous-operand"></div>
+            <div data-current-operand class="current-operand">0</div>
+        </div>
+
+        <button data-scientific="sin">sin</button>
+        <button data-scientific="cos">cos</button>
+        <button data-scientific="tan">tan</button>
+        <button data-scientific="log">ln</button>
+        <button data-scientific="log10">log</button>
+
+        <button data-scientific="sqrt">√</button>
+        <button data-scientific="pow2">x²</button>
+        <button data-scientific="pow3">x³</button>
+        <button data-scientific="factorial">n!</button>
+        <button data-scientific="pi">π</button>
+
+        <button data-all-clear class="span-2">AC</button>
+        <button data-delete>DEL</button>
+        <button data-operation>/</button>
+        <button data-number>7</button>
+        <button data-number>8</button>
+        <button data-number>9</button>
+        <button data-operation>*</button>
+        <button data-number>4</button>
+        <button data-number>5</button>
+        <button data-number>6</button>
+        <button data-operation>+</button>
+        <button data-number>1</button>
+        <button data-number>2</button>
+        <button data-number>3</button>
+        <button data-operation>-</button>
+        <button data-number>.</button>
+        <button data-number>0</button>
+        <button data-scientific="toggleSign">+/-</button>
+        <button data-equals class="span-1">=</button>
+    </div>
+
+    <script src="./dist/calculator.js"></script>
+    <script src="./script.js"></script>
+</body>
+</html>
