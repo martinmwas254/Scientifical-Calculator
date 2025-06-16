@@ -1,103 +1,79 @@
-// Get references to HTML elements
-const numberButtons = document.querySelectorAll('[data-number]');
-const operationButtons = document.querySelectorAll('[data-operation]');
-const scientificButtons = document.querySelectorAll('[data-scientific]');
-const equalsButton = document.querySelector('[data-equals]');
-const deleteButton = document.querySelector('[data-delete]');
-const allClearButton = document.querySelector('[data-all-clear]');
-const previousOperandTextElement = document.querySelector('[data-previous-operand]');
-const currentOperandTextElement = document.querySelector('[data-current-operand]');
+const display = document.getElementById("display");
+const buttons = document.querySelectorAll("button");
+const themeSelect = document.getElementById("themeSelect");
+let currentInput = "";
+let memory = 0;
 
-// Create an instance of the Calculator
-const calculator = new Calculator();
-
-// Function to update the display
-function updateDisplay() {
-    currentOperandTextElement.innerText = calculator.getDisplayCurrentOperand();
-    previousOperandTextElement.innerText = calculator.getDisplayPreviousOperand();
+function updateDisplay(val) {
+  display.textContent = val;
 }
 
-// Event listeners for number buttons
-numberButtons.forEach(button => {
-    button.addEventListener('click', () => {
-        calculator.appendNumber(button.innerText);
-        updateDisplay();
-    });
+function playClickSound() {
+  const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  const oscillator = audioCtx.createOscillator();
+  const gainNode = audioCtx.createGain();
+
+  oscillator.type = "square";
+  oscillator.frequency.setValueAtTime(300, audioCtx.currentTime);
+  gainNode.gain.setValueAtTime(0.05, audioCtx.currentTime);
+
+  oscillator.connect(gainNode);
+  gainNode.connect(audioCtx.destination);
+  oscillator.start();
+  oscillator.stop(audioCtx.currentTime + 0.1);
+}
+
+buttons.forEach(btn => {
+  btn.addEventListener("click", () => {
+    playClickSound();
+    let val = btn.textContent;
+
+    if (val === "AC") {
+      currentInput = "";
+      updateDisplay("0");
+    } else if (val === "DEL") {
+      currentInput = currentInput.slice(0, -1);
+      updateDisplay(currentInput || "0");
+    } else if (val === "=") {
+      try {
+        let result = eval(currentInput);
+        currentInput = result.toString();
+        updateDisplay(currentInput);
+      } catch {
+        updateDisplay("Error");
+        currentInput = "";
+      }
+    } else if (val === "MC") {
+      memory = 0;
+    } else if (val === "MR") {
+      currentInput += memory;
+      updateDisplay(currentInput);
+    } else if (val === "M+") {
+      const currentValue = parseFloat(display.textContent);
+      if (!isNaN(currentValue)) memory += currentValue;
+    } else if (val === "M-") {
+      const currentValue = parseFloat(display.textContent);
+      if (!isNaN(currentValue)) memory -= currentValue;
+    } else {
+      currentInput += val;
+      updateDisplay(currentInput);
+    }
+  });
 });
 
-// Event listeners for operation buttons
-operationButtons.forEach(button => {
-    button.addEventListener('click', () => {
-        calculator.chooseOperation(button.innerText);
-        updateDisplay();
-    });
+themeSelect.addEventListener("change", () => {
+  document.body.className = "";
+  if (themeSelect.value === "light") {
+    document.body.classList.add("light-theme");
+  } else if (themeSelect.value === "blue") {
+    document.body.classList.add("blue-theme");
+  }
 });
 
-// Event listener for equals button
-equalsButton.addEventListener('click', button => {
-    calculator.compute();
-    updateDisplay();
-});
-
-// Event listener for all clear button
-allClearButton.addEventListener('click', button => {
-    calculator.clear();
-    updateDisplay();
-});
-
-// Event listener for delete button
-deleteButton.addEventListener('click', button => {
-    calculator.delete();
-    updateDisplay();
-});
-
-// Event listeners for scientific buttons
-scientificButtons.forEach(button => {
-    button.addEventListener('click', () => {
-        const scientificFunction = button.dataset.scientific;
-        switch (scientificFunction) {
-            case 'sin':
-                calculator.sin();
-                break;
-            case 'cos':
-                calculator.cos();
-                break;
-            case 'tan':
-                calculator.tan();
-                break;
-            case 'log':
-                calculator.log();
-                break;
-            case 'log10':
-                calculator.log10();
-                break;
-            case 'sqrt':
-                calculator.sqrt();
-                break;
-            case 'pow2':
-                calculator.pow(2);
-                break;
-            case 'pow3':
-                calculator.pow(3);
-                break;
-            case 'factorial':
-                calculator.factorial();
-                break;
-            case 'pi':
-                calculator.pi();
-                break;
-            case 'e':
-                calculator.e(); // Add a button for 'e' in HTML if needed
-                break;
-            case 'toggleSign':
-                calculator.toggleSign();
-                break;
-            default:
-                break;
-        }
-        updateDisplay();
-    });
-});
-
-// Initialize display
-updateDisplay();
+// PWA Service Worker registration
+if ("serviceWorker" in navigator) {
+  navigator.serviceWorker
+    .register("sw.js")
+    .then(() => console.log("✅ Service Worker registered"))
+    .catch(err => console.log("❌ SW failed:", err));
+}
